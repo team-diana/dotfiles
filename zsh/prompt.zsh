@@ -1,83 +1,36 @@
-autoload colors && colors
-# cheers, @ehrenmurdick
-# http://github.com/ehrenmurdick/config/blob/master/zsh/prompt.zsh
+#------------------------------
+# Prompt
+#------------------------------
+setprompt () {
+# load some modules
+autoload -U colors zsh/terminfo # Used in the colour alias below
+colors
+setopt prompt_subst
 
-if (( $+commands[git] ))
-then
-  git="$commands[git]"
-else
-  git="/usr/bin/git"
+# make some aliases for the colours: (coud use normal escap.seq's too)
+for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+eval PR_$color='%{$fg[${(L)color}]%}'
+done
+PR_NO_COLOR="%{$terminfo[sgr0]%}"
+
+# Check the UID
+if [[ $UID -ge 1000 ]]; then # normal user
+eval PR_USER='${PR_RED}%n${PR_NO_COLOR}'
+eval PR_USER_OP='${PR_RED}%#${PR_NO_COLOR}'
+elif [[ $UID -eq 0 ]]; then # root
+eval PR_USER='${PR_RED}%n${PR_NO_COLOR}'
+eval PR_USER_OP='${PR_RED}%#${PR_NO_COLOR}'
 fi
 
-git_branch() {
-  echo $($git symbolic-ref HEAD 2>/dev/null | awk -F/ {'print $NF'})
+# Check if we are on SSH or not
+if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
+eval PR_HOST='${PR_RED}%M${PR_NO_COLOR}' #SSH
+else
+eval PR_HOST='${PR_RED}%M${PR_NO_COLOR}' # no SSH
+fi
+# set the prompt
+PS1=$'${PR_RED}[${PR_USER}${PR_RED}@${PR_HOST}${PR_RED}][${PR_RED}%~${PR_RED}]${PR_USER_OP} '
+PS2=$'%_>'
 }
+setprompt
 
-git_dirty() {
-  st=$($git status 2>/dev/null | tail -n 1)
-  if [[ $st == "" ]]
-  then
-    echo ""
-  else
-    if [[ "$st" =~ ^nothing ]]
-    then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
-    else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
-    fi
-  fi
-}
-
-git_prompt_info () {
- ref=$($git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
-}
-
-unpushed () {
-  $git cherry -v @{upstream} 2>/dev/null
-}
-
-need_push () {
-  if [[ $(unpushed) == "" ]]
-  then
-    echo " "
-  else
-    echo " with %{$fg_bold[magenta]%}unpushed%{$reset_color%} "
-  fi
-}
-
-ruby_version() {
-  if (( $+commands[rbenv] ))
-  then
-    echo "$(rbenv version | awk '{print $1}')"
-  fi
-
-  if (( $+commands[rvm-prompt] ))
-  then
-    echo "$(rvm-prompt | awk '{print $1}')"
-  fi
-}
-
-rb_prompt() {
-  if ! [[ -z "$(ruby_version)" ]]
-  then
-    echo "%{$fg_bold[yellow]%}$(ruby_version)%{$reset_color%} "
-  else
-    echo ""
-  fi
-}
-
-directory_name() {
-  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
-}
-
-export PROMPT=$'\n$(rb_prompt)in $(directory_name) $(git_dirty)$(need_push)\n› '
-set_prompt () {
-  export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
-}
-
-precmd() {
-  title "zsh" "%m" "%55<...<%~"
-  set_prompt
-}

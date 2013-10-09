@@ -1,4 +1,137 @@
+"set number "Line numbers are good
+"set backspace=indent,eol,start "Allow backspace in insert mode
+set history=1000 "Store lots of :cmdline history
+set showcmd "Show incomplete cmds down the bottom
+set showmode "Show current mode down the bottom
+"set gcr=a:blinkon0 "Disable cursor blink
+"set visualbell "No sounds
+"set autoread "Reload files changed outside vim
+"
+set undodir=~/.vim/.undo
+set backupdir=~/.vim-tmp
+
+filetype plugin on
+
+" use system clipboard
+set clipboard+=unnamed
+
+"turn on syntax highlighting
 syntax on
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+"auto completition
+set ofu=syntaxcomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType c set omnifunc=ccomplete#Complete
+let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
+"let g:SuperTabDefaultCompletionType = "context"
+
+"disable bell
+set noeb vb t_vb=
+
+" ================ Layout =========================
+set hidden
+
+" ================ Search Settings =================
+
+set incsearch "Find the next match as we type the search
+set hlsearch "Hilight searches by default
+
+" ================ Persistent Undo ==================
+" Keep undo history across sessions, by storing in file.
+" Only works all the time.
+
+silent !mkdir ~/.vim/backups > /dev/null 2>&1
+set undodir=~/.vim/backups
+set undofile
+
+" ================ Indentation ======================
+
+set autoindent
+set smartindent
+set smarttab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab
+
+" =============== paste ===============
+set pastetoggle=<F2>
+
+" =============== CSupport ===========
+let g:C_Styles = { '.c,.h,.cc,.cpp,*.hh' : 'CPP' }
+
+" =============== Snippet ===========
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
+
+" =============== SrcExpl =============
+nmap <F8> :SrcExplToggle<CR>
+let g:SrcExpl_winHeight = 8
+let g:SrcExpl_refreshTime = 100
+let g:SrcExpl_jumpKey = "<ENTER>"
+let g:SrcExpl_gobackKey = "<SPACE>"
+let g:SrcExpl_pluginList = [
+        \ "__Tag_List__",
+        \ "_NERD_tree_",
+        \ "-MiniBufExplorer-",
+        \ "Source_Explorer"
+    \ ]
+let g:SrcExpl_searchLocalDef = 1
+let g:SrcExpl_isUpdateTags = 0
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
+let g:SrcExpl_updateTagsKey = "<F12>"
+let g:SrcExpl_prevDefKey = "<F3>"
+let g:SrcExpl_nextDefKey = "<F4>"
+
+
+filetype plugin on
+filetype indent on
+
+set t_Co=256
+colorscheme candycode
+if &diff
+  colorscheme inkpot
+endif
+
+
+" ====== eclim shortcut =======
+
+" maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
+nmap <silent> <c-left> :call eclim#vimplugin#FeedKeys('Ctrl+Left')<cr>
+nmap <silent> <c-right> :call eclim#vimplugin#FeedKeys('Ctrl+Right')<cr>
+
+" ======= tags and cpp stuff =============
+" configure tags - add additional tags here or comment out not-used ones
+set tags+=~/.vim/tags/cpp
+set tags+=~/.vim/tags/qt4
+set tags+=~/.vim/tags/qt
+" build tags of your own project with Ctrl-F12
+map <C-F12> :!ctags -R --sort=yes --c++-kinds=+pl --fields=+iaS --extra=+q .<CR>
+
+" ========= clang_complete ===============
+let g:clang_use_library = 1
+let g:clang_library_path = "/usr/lib/"
+
+" buffer navigation 
+map <Leader>t :CommandTBuffer <CR>
+
+"============= Vundle stuff ===============
+set nocompatible
+filetype off                   " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+ " let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+ " my bundles
+Bundle 'Rip-Rip/clang_complete'
+Bundle 'wesleyche/SrcExpl'
+Bundle 'Command-T'
+Bundle 'scrooloose/nerdtree'
+
+filetype plugin indent on     " required!
+"NOTE: comments after Bundle command are not allowed..

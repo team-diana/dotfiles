@@ -1,48 +1,55 @@
-if [[ -n $SSH_CONNECTION ]]; then
-  export PS1='%m:%3~$(git_info_for_prompt)%# '
-else
-  export PS1='%3~$(git_info_for_prompt)%# '
-fi
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -v
+autoload -U compinit promptinit
+compinit
+promptinit
 
-export LSCOLORS="exfxcxdxbxegedabagacad"
-export CLICOLOR=true
+source /home/clynamen/.localvar
+source /home/clynamen/.aliases
+source /home/clynamen/.exports
 
-fpath=($ZSH/functions $fpath)
+zmodload zsh/mathfunc
 
-autoload -U $ZSH/functions/*(:t)
-
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-
-setopt NO_BG_NICE # don't nice background tasks
-setopt NO_HUP
-setopt NO_LIST_BEEP
-setopt LOCAL_OPTIONS # allow functions to have local options
-setopt LOCAL_TRAPS # allow functions to have local traps
+setopt GLOB
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
 setopt HIST_VERIFY
-setopt SHARE_HISTORY # share history between sessions ???
-setopt EXTENDED_HISTORY # add timestamps to history
-setopt PROMPT_SUBST
-setopt CORRECT
-setopt COMPLETE_IN_WORD
-setopt IGNORE_EOF
-
-setopt APPEND_HISTORY # adds history
-setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share it across sessions
-setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
+setopt HIST_APPEND
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_SPACE
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt NO_HIST_BEEP
+setopt NO_BEEP
+setopt NO_HUP
 
-# don't expand aliases _before_ completion has finished
-#   like: git comm-[tab]
-setopt complete_aliases
+# keybindings (defined AFTER scripts):
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
+bindkey "^[[2~" overwrite-mode
+bindkey "^[[3~" delete-char
+bindkey "^[[5~" up-line-or-search
+bindkey "^[[6~" down-line-or-search
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[4~" end-of-line
+bindkey "^[[8~" end-of-line
+bindkey "^?" backward-delete-char
+bindkey '^R' history-incremental-search-backward
 
-zle -N newtab
+# End of lines configured by zsh-newuser-install
+# Code highlighting
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-bindkey '^[^[[D' backward-word
-bindkey '^[^[[C' forward-word
-bindkey '^[[5D' beginning-of-line
-bindkey '^[[5C' end-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[^N' newtab
-bindkey '^?' backward-delete-char
+# Start tmux by default
+if [ "$TMUX" = "" ]; then tmux; fi
