@@ -7,10 +7,6 @@ autoload -U compinit promptinit
 compinit
 promptinit
 
-source /home/clynamen/.localvar
-source /home/clynamen/.aliases
-source /home/clynamen/.exports
-
 zmodload zsh/mathfunc
 
 setopt GLOB
