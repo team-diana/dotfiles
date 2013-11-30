@@ -1,3 +1,24 @@
+"============= Vundle stuff ===============
+set nocompatible
+filetype off                   " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+ " let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+ " my bundles
+Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Rip-Rip/clang_complete'
+Bundle 'wesleyche/SrcExpl'
+Bundle 'Command-T'
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/syntastic'
+Bundle 'SirVer/ultisnips'
+Bundle 'Chiel92/vim-autoformat'
+
+filetype plugin indent on     " required!
+filetype plugin on
+
 "set number "Line numbers are good
 "set backspace=indent,eol,start "Allow backspace in insert mode
 set history=1000 "Store lots of :cmdline history
@@ -10,25 +31,12 @@ set showmode "Show current mode down the bottom
 set undodir=~/.vim/.undo
 set backupdir=~/.vim-tmp
 
-filetype plugin on
 
 " use system clipboard
 set clipboard+=unnamed
 
 "turn on syntax highlighting
 syntax on
-
-"auto completition
-set ofu=syntaxcomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType c set omnifunc=ccomplete#Complete
-let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
-"let g:SuperTabDefaultCompletionType = "context"
 
 "disable bell
 set noeb vb t_vb=
@@ -97,41 +105,61 @@ if &diff
   colorscheme inkpot
 endif
 
+" ====== NERDTree =============
+map <F2> :NERDTreeToggle<cr>
 
 " ====== eclim shortcut =======
-
-" maps Ctrl-F7 to eclipse's Ctrl-F7 key binding (switch views)
 nmap <silent> <c-left> :call eclim#vimplugin#FeedKeys('Ctrl+Left')<cr>
 nmap <silent> <c-right> :call eclim#vimplugin#FeedKeys('Ctrl+Right')<cr>
-
-" ======= tags and cpp stuff =============
-" configure tags - add additional tags here or comment out not-used ones
-set tags+=~/.vim/tags/cpp
-set tags+=~/.vim/tags/qt4
-set tags+=~/.vim/tags/qt
-" build tags of your own project with Ctrl-F12
-map <C-F12> :!ctags -R --sort=yes --c++-kinds=+pl --fields=+iaS --extra=+q .<CR>
-
-" ========= clang_complete ===============
-let g:clang_use_library = 1
-let g:clang_library_path = "/usr/lib/"
 
 " buffer navigation 
 map <Leader>t :CommandTBuffer <CR>
 
-"============= Vundle stuff ===============
-set nocompatible
-filetype off                   " required!
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" ========== Autoformat ============
+noremap <F3> :Autoformat<CR><CR>
 
- " let Vundle manage Vundle
-Bundle 'gmarik/vundle'
- " my bundles
-Bundle 'Rip-Rip/clang_complete'
-Bundle 'wesleyche/SrcExpl'
-Bundle 'Command-T'
-Bundle 'scrooloose/nerdtree'
+" ========== ultisnips =============
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR> 
 
-filetype plugin indent on     " required!
-"NOTE: comments after Bundle command are not allowed..
+"========= Syntastic ======
+let g:syntastic_id_checkers = 1
+let g:syntastic_error_symbol = '>>'
+let g:syntastic_warning_symbol = 'W'
+let g:syntastic_always_populate_loc_list = 1
+
+"======== Quickfix =======
+nnoremap <F6> :call ToggleLop()<CR> 
+let g:ToggleLopShown = 1 
+function! ToggleLop() 
+  if( g:ToggleLopShown == 0 ) 
+      :lop
+      let g:ToggleLopShown = 1 
+  else 
+      :lcl
+      let g:ToggleLopShown = 0 
+  endif 
+endfunction 
+
+
+"=========ultisnips - ycm conflicts ======
+function! g:UltiSnips_Complete()
+    call UltiSnips_ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips_JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
+endfunction
+
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
