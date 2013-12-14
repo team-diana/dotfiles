@@ -1,14 +1,41 @@
-[user]
-	name = Rover
-	email = info@teamdiana.org
-[core]
-	editor = nano
-	autocrlf = input
+#[user]
+#	name = Rover
+#	email = info@teamdiana.org
+## These should not be set on the rover to force people to no commit on it
+#[hub]
+#        protocol = https
+#[user]
+#        name = AUTHORNAME
+#        email = AUTHOREMAIL
+#[credential]
+#        helper = GIT_CREDENTIAL_HELPER
+############################################################################
+
 [alias]
+        co = checkout
+        promote = !$ZSH/bin/git-promote
+        wtf     = !$ZSH/bin/git-wtf
+        rank-contributers = !$ZSH/bin/git-rank-contributers
+        count   = !git shortlog -sn
 	lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %an)%Creset' --abbrev-commit --date=relative --graph
 [color]
-	ui = auto
-
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+[core]
+        editor = nano
+        autocrlf = input
+[apply]
+        whitespace = nowarn
+[mergetool]
+        keepBackup = false
+[difftool]
+        prompt = false
+[help]
+        autocorrect = 1
+#[push]
+#        default = simple
 # Use https instead of git and git+ssh
 [url "https://github.com/"]
   insteadOf = git://github.com/

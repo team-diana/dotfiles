@@ -18,8 +18,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=5000
+HISTFILESIZE=10000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -124,25 +124,22 @@ source /opt/ros/hydro/setup.bash
 ## OVERLAY INSTALL SPACE ONTO ROS INSTALL
 source /opt/ros/my_packages/setup.bash
 
-## FOR roscd export ROS_WORKSPACE=~/catkin_ws
+## FOR roscd
+export ROS_WORKSPACE=~/catkin_ws
 
-## FOR USE WHEN RUNNING CMAKE
-# i.e. cmake ../src -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-export CMAKE_INSTALL_PREFIX=/opt/ros/my_packages
-
-## FOR CATKIN
-export CMAKE_PREFIX_PATH=/opt/ros/my_packages:$CMAKE_PREFIX_PATH
+##### WARNING: THE FOLLOWING TWO COMMANDS ARE BROKEN AND HAVE BEEN COMMENTED #####
+## FOR USE WHEN RUNNING CMAKE                                                    #
+# i.e. cmake ../src -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}               #
+#export CMAKE_INSTALL_PREFIX=/opt/ros/my_packages                                #
+#                                                                                #
+## FOR CATKIN                                                                    #
+#export CMAKE_PREFIX_PATH=/opt/ros/my_packages:$CMAKE_PREFIX_PATH                #
+##################################################################################
 
 ## FOR MIRA
 source /opt/mira/start.bash
-# or
-#export MIRA_PATH=/opt/mira
-#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mira/lib
-#export PATH=$PATH:/opt/mira/bin
-#source /opt/mira/scripts/mirabash
 
 ############# #############
 
-##for develope
-
+## for development
 source ~/catkin_ws/devel/setup.bash
