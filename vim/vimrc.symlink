@@ -1,20 +1,19 @@
 "============= Vundle stuff ===============
 set nocompatible
 filetype off                   " required!
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+"set rtp+=~/.vim/bundle/vundle/
+"call vundle#rc()
 
  " let Vundle manage Vundle
-Bundle 'gmarik/vundle'
  " my bundles
-Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Valloric/YouCompleteMe'
 "Bundle 'Rip-Rip/clang_complete'
-Bundle 'wesleyche/SrcExpl'
-Bundle 'Command-T'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'SirVer/ultisnips'
-Bundle 'Chiel92/vim-autoformat'
+"Bundle 'wesleyche/SrcExpl'
+"Bundle 'Command-T'
+"Bundle 'scrooloose/nerdtree'
+"Bundle 'scrooloose/syntastic'
+"Bundle 'SirVer/ultisnips'
+"Bundle 'Chiel92/vim-autoformat'
 
 filetype plugin indent on     " required!
 filetype plugin on
@@ -100,9 +99,9 @@ filetype plugin on
 filetype indent on
 
 set t_Co=256
-colorscheme candycode
+"colorscheme candycode
 if &diff
-  colorscheme inkpot
+"  colorscheme inkpot
 endif
 
 " ====== NERDTree =============
