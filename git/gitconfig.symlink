@@ -1,0 +1,16 @@
+[user]
+	name = Rover
+	email = info@teamdiana.org
+[core]
+	editor = nano
+	autocrlf = input
+[alias]
+	lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %an)%Creset' --abbrev-commit --date=relative --graph
+[color]
+	ui = auto
+
+# Use https instead of git and git+ssh
+[url "https://github.com/"]
+  insteadOf = git://github.com/
+[url "https://github.com/"]
+  insteadOf = git@github.com:
